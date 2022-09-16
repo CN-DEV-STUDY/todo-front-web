@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import {useHistory} from 'react-router-dom'
 import styled, { css } from 'styled-components';
 import { MdAdd } from 'react-icons/md';
 import {BsFillCalendarCheckFill , BsFillInboxesFill} from 'react-icons/bs'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import axios from 'axios';
 
 const CircleButton = styled.button`
   background: #38d9a9;
@@ -92,16 +94,55 @@ const InputContent = styled.input`
   icon : 
 `;
 
+const SubmitBtn = styled.button`
+  /* Adapt the colors based on primary prop */
+  background: ${(props) => (props.primary ? "palevioletred" : "white")};
+  color: ${(props) => (props.primary ? "white" : "#ff6b6b")};
+
+  font-size: 1em;
+  margin-top: 5px;
+  margin-left: 204px;
+  padding: 1em 6em;
+  border: 2px solid #ff6b6b;
+  border-radius: 3px;
+`;
+
 function TodoCreate() {
   const [open, setOpen] = useState(false);
   const [click, setClick] = useState(false);
   const [startDate, setStartDate] = useState(new Date())
 
+  const [todo , setTodo] = useState({
+    title : "",
+    content : "",
+    mno : 1,
+    uno: 1
+  }) 
   const onToggle = () => setOpen(!open);
   const onClick = () =>{
     setClick(!click);
   }
 
+  const onChange = (e)=> {
+    const {name, value} = e.target;
+    setTodo(
+      {
+      ...todo,
+      [name] : value
+    
+    }
+    )
+    console.log(todo)
+}
+const history = useHistory();
+
+const buttonHandler=()=>{
+  const url = "/todo/register"
+  axios.post(url, {...todo})
+  .then(response => console.log("respose data : " , response.data))
+  .catch((error) => alert("등록 실패"))
+
+}
   return (
     <>
       {open && (
@@ -110,9 +151,9 @@ function TodoCreate() {
             <BsFillInboxesFill size="30"/>
             <BsFillCalendarCheckFill size="30" style={{marginLeft:10}} onClick={onClick}/>
             {click ? <DatePicker selected={startDate} onChange={(date) => setStartDate(date)}/> : null} 
-            <InputTitle autoFocus placeholder="제목을 입력하세요."/>
-            <InputContent autoFocus placeholder="내용을 입력하세요.">
-            </InputContent>
+            <InputTitle autoFocus name="title" placeholder="제목을 입력하세요." onChange={onChange}/>
+            <InputContent autoFocus name="content" placeholder="내용을 입력하세요."  onChange={onChange}/>
+            <SubmitBtn type='button' onClick={buttonHandler}>submit</SubmitBtn>
           </InsertForm>
         </InsertFormPositioner>
       )}
