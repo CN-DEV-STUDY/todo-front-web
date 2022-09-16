@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import {useHistory} from 'react-router-dom'
 import styled, { css } from 'styled-components';
 import { MdAdd } from 'react-icons/md';
 import {BsFillCalendarCheckFill , BsFillInboxesFill} from 'react-icons/bs'
@@ -134,14 +133,13 @@ function TodoCreate() {
     )
     console.log(todo)
 }
-const history = useHistory();
 
 const buttonHandler=()=>{
   const url = "/todo/register"
   axios.post(url, {...todo})
   .then(response => console.log("respose data : " , response.data))
   .catch((error) => alert("등록 실패"))
-
+  window.location.reload();
 }
   return (
     <>
