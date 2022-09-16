@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import TodoItem from "./TodoItem";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const TodoListBlock = styled.div`
   flex: 1;
@@ -10,20 +12,31 @@ const TodoListBlock = styled.div`
 `;
 
 function TodoList() {
+  const [list, setList] = useState(null);
+  const [loading, setLoading] = useState(null);
+
+  useEffect(() => {
+    const fetchList = async () => {
+      try {
+        setList(null);
+        setLoading(true);
+        const response = await axios.get("/todo/list/1");
+        setList(response.data);
+      } catch (e) {}
+      setLoading(false);
+    };
+    fetchList();
+  }, []);
+
+  if (loading) return <div>로딩중..</div>;
+
+  console.log("list" + list);
   return (
     <TodoListBlock>
-      <TodoItem
-        text="프로젝트 생성하기"
-        content={"프로젝트 생성 시작!!!"}
-        done={true}
-      />
-      <TodoItem
-        text="컴포넌트 스타일링 하기"
-        content={"컴포넌트 개꿀~"}
-        done={true}
-      />
-      <TodoItem text="Context 만들기" content={"컨텍스트 극혐~"} done={false} />
-      <TodoItem text="기능 구현하기" content={"기능 구현완료"} done={false} />
+      {list &&
+        list.map((todo) => (
+          <TodoItem text={todo.title} content={todo.content} done={true} />
+        ))}
     </TodoListBlock>
   );
 }
