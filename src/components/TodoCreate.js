@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { MdAdd } from 'react-icons/md';
 import {BsFillCalendarCheckFill , BsFillInboxesFill} from 'react-icons/bs'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const CircleButton = styled.button`
   background: #38d9a9;
@@ -92,16 +94,22 @@ const InputContent = styled.input`
 
 function TodoCreate() {
   const [open, setOpen] = useState(false);
+  const [click, setClick] = useState(false);
+  const [startDate, setStartDate] = useState(new Date())
 
   const onToggle = () => setOpen(!open);
+  const onClick = () =>{
+    setClick(!click);
+  }
 
   return (
     <>
       {open && (
         <InsertFormPositioner>
           <InsertForm>
-            <BsFillCalendarCheckFill size="30"/>
-            <BsFillInboxesFill size="30" style={{marginLeft:10}}/>
+            <BsFillInboxesFill size="30"/>
+            <BsFillCalendarCheckFill size="30" style={{marginLeft:10}} onClick={onClick}/>
+            {click ? <DatePicker selected={startDate} onChange={(date) => setStartDate(date)}/> : null} 
             <InputTitle autoFocus placeholder="제목을 입력하세요."/>
             <InputContent autoFocus placeholder="내용을 입력하세요.">
             </InputContent>
