@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { MdAdd } from 'react-icons/md';
+import {BsFillCalendarCheckFill , BsFillInboxesFill} from 'react-icons/bs'
 
 const CircleButton = styled.button`
   background: #38d9a9;
@@ -65,14 +66,28 @@ const InsertForm = styled.form`
   border-top: 1px solid #e9ecef;
 `;
 
-const Input = styled.input`
+const InputTitle = styled.input`
   padding: 12px;
   border-radius: 4px;
   border: 1px solid #dee2e6;
+  margin-top : 10px;
   width: 100%;
   outline: none;
   font-size: 18px;
   box-sizing: border-box;
+`;
+
+const InputContent = styled.input`
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  margin-top : 10px;
+  width: 100%;
+  height : 100px;
+  outline: none;
+  font-size: 18px;
+  box-sizing: border-box;
+  icon : 
 `;
 
 function TodoCreate() {
@@ -85,7 +100,11 @@ function TodoCreate() {
       {open && (
         <InsertFormPositioner>
           <InsertForm>
-            <Input autoFocus placeholder="할 일을 입력 후, Enter 를 누르세요" />
+            <BsFillCalendarCheckFill size="30"/>
+            <BsFillInboxesFill size="30" style={{marginLeft:10}}/>
+            <InputTitle autoFocus placeholder="제목을 입력하세요."/>
+            <InputContent autoFocus placeholder="내용을 입력하세요.">
+            </InputContent>
           </InsertForm>
         </InsertFormPositioner>
       )}
