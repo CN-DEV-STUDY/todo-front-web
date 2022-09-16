@@ -1,6 +1,7 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
-import { MdDone, MdDelete } from 'react-icons/md';
+import React, { useState } from "react";
+import styled, { css } from "styled-components";
+import { MdDone, MdDelete } from "react-icons/md";
+import TodoContent from "./TodoContent";
 
 const Remove = styled.div`
   display: flex;
@@ -38,7 +39,7 @@ const CheckCircle = styled.div`
   justify-content: center;
   margin-right: 20px;
   cursor: pointer;
-  ${props =>
+  ${(props) =>
     props.done &&
     css`
       border: 1px solid #38d9a9;
@@ -48,24 +49,36 @@ const CheckCircle = styled.div`
 
 const Text = styled.div`
   flex: 1;
+
   font-size: 21px;
   color: #495057;
-  ${props =>
+  ${(props) =>
     props.done &&
     css`
       color: #ced4da;
     `}
 `;
 
-function TodoItem({ id, done, text }) {
+function TodoItem({ id, done, text, content }) {
+  const [isActive, setActive] = useState(false);
+
+  const toggleClass = () => {
+    setActive(!isActive);
+  };
+
   return (
-    <TodoItemBlock>
-      <CheckCircle done={done}>{done && <MdDone />}</CheckCircle>
-      <Text done={done}>{text}</Text>
-      <Remove>
-        <MdDelete />
-      </Remove>
-    </TodoItemBlock>
+    <>
+      <TodoItemBlock>
+        <CheckCircle done={done}>{done && <MdDone />}</CheckCircle>
+        <Text onClick={toggleClass} done={done}>
+          {text}
+        </Text>
+        <Remove>
+          <MdDelete />
+        </Remove>
+      </TodoItemBlock>
+      {isActive ? <TodoContent content={content}></TodoContent> : null}
+    </>
   );
 }
 
