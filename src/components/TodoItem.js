@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import styled, { css } from "styled-components";
 import { MdDone, MdDelete } from "react-icons/md";
 import TodoContent from "./TodoContent";
+import axios from "axios";
 
 const Remove = styled.div`
   display: flex;
@@ -40,7 +41,7 @@ const CheckCircle = styled.div`
   margin-right: 20px;
   cursor: pointer;
   ${(props) =>
-    props.done &&
+    props.done && 
     css`
       border: 1px solid #38d9a9;
       color: #38d9a9;
@@ -59,25 +60,39 @@ const Text = styled.div`
     `}
 `;
 
-function TodoItem({ id, done, text, content }) {
+function TodoItem({ id, done, text, content , todo }) {
   const [isActive, setActive] = useState(false);
 
   const toggleClass = () => {
     setActive(!isActive);
   };
 
+  const [check, setCheck] = useState(done)
+
+  const checkToggle=()=>{
+    setCheck(!check)
+  }
+
+
+  const removeButtonHanlder=()=>{
+    axios.put("/todo/delete/3")
+    .then(response => console.log("respose data : " , response.data))
+    .catch((error) => alert("삭제 실패"))
+    window.location.reload();
+  }
+  
   return (
     <>
       <TodoItemBlock>
-        <CheckCircle done={done}>{done && <MdDone />}</CheckCircle>
-        <Text onClick={toggleClass} done={done}>
+        <CheckCircle onClick={checkToggle} done={check}>{check && <MdDone />}</CheckCircle>
+        <Text onClick={toggleClass} done={check}>
           {text}
         </Text>
         <Remove>
-          <MdDelete />
+          <MdDelete onClick={removeButtonHanlder} />
         </Remove>
       </TodoItemBlock>
-      {isActive ? <TodoContent content={content}></TodoContent> : null}
+      {isActive? <TodoContent content={content}></TodoContent> : null}
     </>
   );
 }

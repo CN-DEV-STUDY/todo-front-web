@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { MdAdd } from 'react-icons/md';
 import {BsFillCalendarCheckFill , BsFillInboxesFill} from 'react-icons/bs'
+import {FaTrash} from 'react-icons/fa'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios';
@@ -90,7 +91,6 @@ const InputContent = styled.input`
   outline: none;
   font-size: 18px;
   box-sizing: border-box;
-  icon : 
 `;
 
 const SubmitBtn = styled.button`
@@ -141,12 +141,28 @@ const buttonHandler=()=>{
   .catch((error) => alert("등록 실패"))
   window.location.reload();
 }
+
+const [isBinHovering, setIsBinHovering] = useState(0);
+const [isMgHovering, setIsMgHovering] = useState(0);
+
+
   return (
     <>
       {open && (
         <InsertFormPositioner>
           <InsertForm>
-            <BsFillInboxesFill size="30"/>
+          <span>
+            {isBinHovering ? (
+                  <p style={{fontSize:5}}>휴지통으로 이동</p>
+              ) : ""}
+              <FaTrash size="30" onMouseOver={() => setIsBinHovering(1)} onMouseOut={() => setIsBinHovering(0)} />
+
+              {isMgHovering ? (
+                  <p style={{fontSize:5}}>관리함으로 이동</p>
+              ) : ""}
+            <BsFillInboxesFill style={{marginLeft:10}} size="30" onMouseOver={() => setIsMgHovering(1)} onMouseOut={() => setIsMgHovering(0)}/>
+          </span>
+
             <BsFillCalendarCheckFill size="30" style={{marginLeft:10}} onClick={onClick}/>
             {click ? <DatePicker selected={startDate} onChange={(date) => setStartDate(date)}/> : null} 
             <InputTitle autoFocus name="title" placeholder="제목을 입력하세요." onChange={onChange}/>

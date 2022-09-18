@@ -39,7 +39,8 @@ function TodoList() {
             key={todo.tno}
             text={todo.title}
             content={todo.content}
-            done={true}
+            done={false}
+            todo={todo}
           />
         ))}
     </TodoListBlock>
