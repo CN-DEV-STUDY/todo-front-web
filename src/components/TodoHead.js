@@ -1,5 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import Moment from "react-moment";
+import axios from "axios";
 
 const TodoHeadBlock = styled.div`
   padding-top: 48px;
@@ -26,11 +28,29 @@ const TodoHeadBlock = styled.div`
 `;
 
 function TodoHead() {
+  const now = new Date().toLocaleDateString();
+
+  const [count, setCount] = useState();
+
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const response = await axios.get("/todo/selectCount/1");
+        setCount(response.data);
+      } catch (e) {}
+    };
+    fetchCount();
+  }, []);
+
   return (
     <TodoHeadBlock>
-      <h1>2019년 7월 10일</h1>
-      <div className="day">수요일</div>
-      <div className="tasks-left">할 일 2개 남음</div>
+      <h1>
+        <Moment format="YYYY년MM월DD일">{now}</Moment>
+      </h1>
+      <div className="day">
+        <Moment format="dddd">{now}</Moment>
+      </div>
+      <div className="tasks-left">할 일 {count}개 남음</div>
     </TodoHeadBlock>
   );
 }

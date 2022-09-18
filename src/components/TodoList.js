@@ -35,7 +35,12 @@ function TodoList() {
     <TodoListBlock>
       {list &&
         list.map((todo) => (
-          <TodoItem text={todo.title} content={todo.content} done={true} />
+          <TodoItem
+            key={todo.tno}
+            text={todo.title}
+            content={todo.content}
+            done={true}
+          />
         ))}
     </TodoListBlock>
   );
